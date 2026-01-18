@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  libretranslate:
+    container_name: libretranslate
+    image: libretranslate/libretranslate:latest-cuda
+    restart: unless-stopped
+    ports: 
+      - 4236:5000
+    environment:
+      - LT_FRONTEND_LANGUAGE_TARGET=fr
