@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+  open-webui:
+    container_name: open-webui
+    image: ghcr.io/open-webui/open-webui:main-slim
+    restart: unless-stopped
+    ports:
+      - "6573:8080"
+    environment:
+      - OLLAMA_BASE_URL=${OLLAMA_SERVER:-http://localhost:11434}
+      - WEBUI_ADMIN_EMAIL=admin@openwebui.lan
+      - WEBUI_ADMIN_PASSWORD=changeme
+      - ENABLE_ADMIN_EXPORT=false
+      - ENABLE_ADMIN_CHAT_ACCESS=false
+      - SHOW_ADMIN_DETAILS=false
+      - ENABLE_PUBLIC_ACTIVE_USERS_COUNT=false
+      - OPENAI_API_BASE_URL=http://pipelines:9099
+      - OPENAI_API_KEY="0p3n-w3bu!"
+      - ENABLE_FOLLOW_UP_GENERATION=false
+      - ENABLE_EVALUATION_ARENA_MODELS=false
+      - ENABLE_COMMUNITY_SHARING=false
+      - ENABLE_TAGS_GENERATION=false
+    volumes:
+      - open-webui:/app/backend/data
+    networks:
+      - open-webui
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  pipelines:
+    container_name: pipelines
+    image: ghcr.io/open-webui/pipelines:main
+    restart: unless-stopped
+    volumes:
+      - pipelines:/app/pipelines
+
+volumes:
+  open-webui: {}
+  pipelines: {}
+
+networks:
+  open-webui:
+    driver: bridge
