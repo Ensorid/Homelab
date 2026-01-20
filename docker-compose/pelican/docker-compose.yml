@@ -16,7 +16,19 @@ services:
       - default
     extra_hosts:
       - "host.docker.internal:host-gateway"
-      
+    depends_on:
+      - redis
+     
+  redis:
+    container_name: pelican_redis
+    image: redis:alpine
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+    networks:
+      - default
+
   cloudflared:
     container_name: cloudflared_pelican
     image: cloudflare/cloudflared:latest
@@ -30,6 +42,7 @@ services:
 volumes:
   pelican-data:
   pelican-logs:
+  redis-data:
 
 networks:
   default:
