@@ -13,7 +13,7 @@ services:
       - pelican-data:/pelican-data
       - pelican-logs:/var/www/html/storage/logs
     networks:
-      - default
+      - pelican
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:
@@ -28,7 +28,7 @@ services:
     volumes:
       - redis-data:/data
     networks:
-      - default
+      - pelican
 
   cloudflared:
     container_name: cloudflared_pelican
@@ -38,7 +38,7 @@ services:
     environment:
       - TUNNEL_TOKEN=${CLOUDFLARE_TOKEN}
     networks:
-      - default
+      - pelican
 
 volumes:
   pelican-data:
@@ -46,7 +46,5 @@ volumes:
   redis-data:
 
 networks:
-  default:
-    ipam:
-      config:
-        - subnet: 172.30.0.0/16
+  pelican:
+    driver: bridge
