@@ -27,6 +27,8 @@ services:
       - open-webui
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    depends_on:
+      - pipelines
 
   pipelines:
     container_name: pipelines
