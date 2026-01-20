@@ -9,6 +9,10 @@ services:
       - XDG_DATA_HOME=/pelican-data
       - APP_URL=http://${DOMAIN}
       - ADMIN_EMAIL=${ADMIN_EMAIL}
+      - CACHE_STORE=redis
+      - SESSION_DRIVER=redis
+      - QUEUE_CONNECTION=redis
+      - REDIS_HOST=redis
     volumes:
       - pelican-data:/pelican-data
       - pelican-logs:/var/www/html/storage/logs
