@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  pelican:
+    container_name: pelican
+    image: ghcr.io/pelican-dev/panel:latest
+    restart: unless-stopped
+    environment:
+      - XDG_DATA_HOME=/pelican-data
+      - APP_URL=http://${DOMAIN}
+      - ADMIN_EMAIL=${ADMIN_EMAIL}
+    volumes:
+      - pelican-data:/pelican-data
+      - pelican-logs:/var/www/html/storage/logs
+    networks:
+      - default
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      
+  cloudflared:
+    container_name: cloudflared_pelican
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TOKEN}
+    networks:
+      - default
+
+volumes:
+  pelican-data:
+  pelican-logs:
+
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 172.30.0.0/16
