@@ -18,6 +18,7 @@ services:
       - "host.docker.internal:host-gateway"
     depends_on:
       - redis
+      - cloudflared
      
   redis:
     container_name: pelican_redis
