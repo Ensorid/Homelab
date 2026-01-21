@@ -30,7 +30,7 @@ services:
       - mariadb
       - redis
       - cloudflared
-  
+
   mariadb:
     container_name: pelican_db
     image: mariadb:11
